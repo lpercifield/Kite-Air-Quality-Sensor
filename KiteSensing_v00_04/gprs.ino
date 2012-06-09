@@ -3,8 +3,8 @@
    http://www.seeedstudio.com/depot/gprs-shield-p-779.html
 
 */
-String feedId = "62666";
-String apiKey = "YOUR API KEY HERE";
+String feedId = "YOUR FEED ID";
+String apiKey = "YOUR API KEY";
 
 int retries=0;
 
@@ -21,12 +21,6 @@ void configModem(){
     powerOn();
   }
   
-  Serial.println("Turn on GPRS Modem and wait for 1 minute.");
-  Serial.println("and then press a key");
-  Serial.println("Press c for power on configuration");
-  Serial.println("press any other key for uploading");
-  Serial.flush();
-
   Serial.println("Executing AT Commands for one time power on configuration");
   GPRS_Serial.flush();
   GPRS_Serial.println("ATE0"); //Command echo off
@@ -167,12 +161,12 @@ boolean GPRS_Listener(char bytes, int timeout ){
 
 char GPRS_Serial_wait_for_bytes(char no_of_bytes, int timeout)
 {
-  Serial.println("starting countdown");
+  //Serial.println("starting countdown"); //uncomment for debugging
   while(GPRS_Serial.available() < no_of_bytes)
   {
     delay(200);
     timeout-=1;
-    Serial.println(timeout);
+    //Serial.println(timeout); //uncomment for debuggin
     if(timeout == 0)
     {
       return 0;

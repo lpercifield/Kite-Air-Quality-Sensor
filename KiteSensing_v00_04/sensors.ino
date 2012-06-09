@@ -5,30 +5,6 @@
 //debounce time
 #define DEBOUNCETIME 10
 
-//---------- temperature ----------
-//int getTemperature(){
-//  byte tmp102comm; // Wire.requestFrom(0x48,2); 
-//  if (tmp102comm == 2) {
-//    byte msb = Wire.read(); /* Whole degrees */
-//    byte lsb = Wire.read(); /* Fractional degrees */
-//    int val = ((msb) << 4);   /* MSB */
-//    val |= (lsb >> 4);    /* LSB */
-//    float celsius = (val*0.0625)-5;
-//    float farenheit = (celsius*1.8) + 32;
-//    return int(celsius);
-//  }else {
-//   
-//     return 999;
-//  }
-//}
-
-//---------- light ----------
-//int getLight(){
-//  int lightVal = 0;
-//  lightVal = analogRead(2);
-//  delay(DEBOUNCETIME);
-//  return lightVal;    
-//}
 
 //---------- humidity ----------
 int getHumidity(){
@@ -41,24 +17,6 @@ int getHumidity(){
   humidityVal = humidityVal/NUMREADINGS;    
   return humidityVal;   
 }
-
-//---------- ambient noise ----------
-//int getNoise(){
-//  int noiseVal = 0;
-//  int ctr = 0;
-//  int nAverage = 0;
-//  for(int i = 0; i< NUMREADINGS-10; i++){
-//    int tempRead = analogRead(A0);
-//    if(tempRead > 0){
-//      tempRead = abs(tempRead - 300);
-//      noiseVal = noiseVal + tempRead;
-//      ctr++;
-//      delay(DEBOUNCETIME);
-//    }
-//  }
-//  noiseVal = noiseVal/ctr;
-//  return noiseVal;
-//}
 
 //---------- carbon dioxide ----------
 int getCO2(){

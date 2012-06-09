@@ -25,10 +25,7 @@
  */
  
 #include <SoftwareSerial.h>
-//#include <SD.h>
-//#include <SPI.h>
-//#include <Ethernet.h>
-//#include <Wire.h>
+//#include <SD.h> //uncomment to enable SD Card storage functions
 #include <CS_MQ7.h>
 #include <OneWire.h>
 #include <DallasTemperature.h>
@@ -37,6 +34,11 @@
 
 #define ONE_WIRE_BUS 5
 #define TEMPERATURE_PRECISION 12
+#define NUM_SENSORS 5 //set this to the number of sensors you will be using
+
+//enter the string names as found on pachube
+String sensorTitle[NUM_SENSORS] = { "Temp", "Humidity", "CO2", "CO", "VOC"};
+float sensorData[NUM_SENSORS];
 
 
 OneWire onewire(ONE_WIRE_BUS);
@@ -82,56 +84,40 @@ void loop() {
   Serial.println("Reading Sensors...");
 
   // read the sensors:
-  Serial.println("sensor 1 - temperature..."); //temperature
+  Serial.print("sensor 1 - temperature..."); //temperature
   tempSensor.requestTemperatures();
-  float sensor1_reading = tempSensor.getTempC(temp);
-  //sensor1_reading = getTemperature();
-//  dataString = "Temp,";
-//  dataString += String(sensor1_reading);
-//  Serial.println(dataString);
-//  dataString+="\n\r";
+  sensorData[0] = tempSensor.getTempC(temp);
+  Serial.println( sensorData[0] );
 
-  Serial.println("sensor 2 - humidity..."); //humidity
-  int sensor2_reading = getHumidity();
-//  dataString += "Humidity,";
-//  dataString += String(sensor2_reading);
-//  dataString+="\n\r";
-//  Serial.println(dataString);
+  Serial.print("sensor 2 - humidity..."); //humidity
+  sensorData[1] = getHumidity();
+  Serial.println(sensorData[1]);
 
-  Serial.println("sensor 4 - CO2..."); //CO2
-  int sensor4_reading = getCO2();
-//  dataString += "CO2,";
-//  dataString += String(sensor4_reading);
-//  dataString += "\n\r";
-//  Serial.println(dataString);
+  Serial.print("sensor 3 - CO2..."); //CO2
+  sensorData[2] = getCO2();
+  Serial.println(sensorData[2]);
 
-  Serial.println("sensor 5 - CO..."); //CO
-  int sensor5_reading = getCO();
-//  dataString += "CO,";
-//  dataString +=  String(sensor5_reading);
-//  dataString += "\n\r";
-//  Serial.println(dataString);
-
-  Serial.println("sensor 6 - Air Qual..."); //Air Quality
-  int sensor6_reading = getAirQual();
-//  dataString += "VOC,";
-//  dataString += String(sensor6_reading);
-//  dataString +="\n\r\n\r";
-//  Serial.println(dataString);
+  Serial.print("sensor 4 - CO..."); //CO
+  sensorData[3] = getCO();
+  Serial.println(sensorData[3]);
   
-  int length= 52;//dataString.length();
+  Serial.print("sensor 5 - Air Qual..."); //Air Quality
+  sensorData[4] = getAirQual();
+  Serial.println(sensorData[4]);
+  
+  int length= 56; //set a length for the CSV string you will send to Pachube
+  
   Serial.print("String Length: ");
   Serial.println(length);
   
   String sLength = String(length);
-  if(!config){
-    configModem();
-  }
-  sendToPachube(sLength, sensor1_reading, sensor2_reading, sensor4_reading, sensor5_reading, sensor6_reading);
+  
+  if(!config) configModem();
+  sendToPachube(sLength, sensorData, sensorTitle);
+  //sendToPachube(sLength, sensor1_reading, sensor2_reading, sensor4_reading, sensor5_reading, sensor6_reading);
   dataString=" ";
+  
   Serial.println("... end of loop ...");
-
-  //delay(1000);
   delay(10000);
 }
 
